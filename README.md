@@ -17,7 +17,7 @@ Both models are evaluated using **FID** (Fréchet Inception Distance).
 .
 ├── ddpm-fashion-mnist.ipynb   # DDPM training, sampling, and evaluation
 ├── fashion-mnist-vae.ipynb    # VAE training and evaluation
-└── Report documenting.md
+└── VAE vs DDPM Architectures.md
 ```
 
 
