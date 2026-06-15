@@ -15,7 +15,7 @@ VAE has two parts:
 - An Encoder that takes an image and compresses it into a small list of numbers, In our case, this is a vector of just 128 numbers, compared to the 784 pixels in the original image.
 - A Decoder that takes any list of 128 numbers and turns it back into an image.
 
-![VAE Arch](blob:https://markdownviewer.pages.dev/305b42c6-1483-41e7-9298-cdf2d1d7e373)
+![VAE Architecture](assets/VAE.PNG)
 
 **Reparameterization Trick**:
 A plain autoencoder (without the "variational") would only learn to reconstruct images it has already seen. The "variational" part adds a crucial twist: instead of mapping each image to a single fixed point, the encoder maps it to a **small region** in the compressed space and **described it is  by a mean(μ) and a standard deviation(σ)**. During training, the model samples a random point from that region and decodes it.
@@ -44,7 +44,7 @@ ELBO = Reconstruction Quality  −  KL Penalty
 For DDPM, instead of compressing images, it learns to reverse a destruction process. It takes a clear photo and slowly adding static (random noise) to it, step by step, over 1000 steps. By the end, the image is pure random noise.
 This destruction process is called the **forward process**, and it is fixed and mathematical (no learning needed).
 
-![DDPM Arch](blob:https://markdownviewer.pages.dev/e26d3698-acf1-4ad6-8f19-64fe7b1bcef4)
+![DDPM Arch](assets/DDPM.PNG)
 
 #### What the model learns.
 
@@ -284,7 +284,7 @@ Output: GroupNorm → SiLU → Conv1×1 → (B, 1, 28, 28)
  
 - **Skip connections**: Each encoder level is directly connected to its corresponding decoder level via a concatenation. This passes fine spatial detail from the shallow layers to the decoder, compensating for information lost during downsampling. This is what makes the output spatially accurate rather than blurry.
 
-![U-Net Architecture for ddpm](blob:https://markdownviewer.pages.dev/0fa32445-7178-40e4-8418-8cc840fa680c)
+![U-Net Architecture for ddpm](assets/u-net-architecture for ddpm.PNG)
 
 
 
@@ -350,7 +350,8 @@ class Attention(nn.Module):
 
 Sampling is the reverse of training. Instead of adding noise, we remove it 999 times, starting from pure Gaussian noise (as if we were at timestep 1000) and at each step we subtract a calibrated fraction of it, then repeat from t=999 down to t=1.
 
-![Sampling (Reverse Process)](blob:https://markdownviewer.pages.dev/e1902a35-96e3-4fa9-b922-bc4e125f21cf)
+![Sampling (Reverse Process)](assets/sampling in ddpm.PNG)
+
 ---
 
 ## Experimental Setup
@@ -406,12 +407,12 @@ The latent space is well-spread, and random samples from N(0, I) land in recogni
 
 | Latent Space | VAE generated samples
 |--------|-----
-| ![alt text](blob:https://markdownviewer.pages.dev/c9e22fd8-80f8-4349-b27b-a725735c0448)|![alt text](blob:https://markdownviewer.pages.dev/14836a59-c269-46c7-96b8-d19f678b8c79) 
+| ![vae_latent_tsne](assets/vae_latent_tsne.png)|![vae_samples](assets/vae_samples.png) 
 
 ### Reconstruction Fidelity (VAE)
 
 **Fine detail and texture are lost** The logo on the sweatshirt clearly visible in the real image , it is completely absent in the reconstruction , replaced by a smooth grey rectangle. Similarly, the last shirt  becomes a plain in the reconstruction. The MSE loss treats all pixels equally and penalizes large structural errors more than fine textures, so the decoder learns to "average out" detail rather than commit to specific patterns.
-![alt text](blob:https://markdownviewer.pages.dev/752d4143-f060-4059-9769-487aa97bc3e4)
+![vae_reconstructions](assets/vae_reconstructions.png)
 
 ### **DDPM Analysis** 
 
@@ -419,9 +420,10 @@ The latent space is well-spread, and random samples from N(0, I) land in recogni
 
 **Texture and pattern variety** Within the same category, samples show meaningful variation. The upper-body garments in the top row range from a plain pullover , a zip-up jacket and short sleeves shirt, the bags vary in strap configuration and proportions. This intra-class diversity is a strength of the DDPM's stochastic reverse process 
 
+
 | DDPM  | DDPM generated samples
 |--------|-----
-|![alt text](blob:https://markdownviewer.pages.dev/75a6f594-5cae-486f-864f-5f81765ae47b) |![alt text](blob:https://markdownviewer.pages.dev/a5fa4e1e-d1ac-444d-a220-0948c8da9508)
+|![ddpm_samples](assets/ddpm_samples.PNG)|![ddpm_samples](assets/ddpm_real_vs_generated.png)
 
 ---
 
