@@ -284,7 +284,7 @@ Output: GroupNorm → SiLU → Conv1×1 → (B, 1, 28, 28)
  
 - **Skip connections**: Each encoder level is directly connected to its corresponding decoder level via a concatenation. This passes fine spatial detail from the shallow layers to the decoder, compensating for information lost during downsampling. This is what makes the output spatially accurate rather than blurry.
 
-![U-Net Architecture for ddpm](assets/u-net-architecture for ddpm.PNG)
+![U-Net Architecture for ddpm](assets/unet_architecture_for_ddpm.PNG)
 
 
 
@@ -350,7 +350,7 @@ class Attention(nn.Module):
 
 Sampling is the reverse of training. Instead of adding noise, we remove it 999 times, starting from pure Gaussian noise (as if we were at timestep 1000) and at each step we subtract a calibrated fraction of it, then repeat from t=999 down to t=1.
 
-![Sampling (Reverse Process)](assets/sampling in ddpm.PNG)
+![Sampling (Reverse Process)](assets/sampling_ddpm.PNG)
 
 ---
 
